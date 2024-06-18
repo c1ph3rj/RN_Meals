@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, FlatList } from "react-native";
+import { View, StyleSheet, StatusBar, FlatList } from "react-native";
 import { CATEGORIES, MEALS } from "../data/dummy_data";
 import { MealItem } from "../components/MealItem";
 import { useLayoutEffect } from "react";
@@ -30,6 +30,7 @@ export const MealsOverviewScreen = ({ route, navigation }) => {
             const mealItem = mealItemData.item;
             return <MealItem item={mealItem} onPress={onPressMealItemHandler.bind(this, mealItem.id)}/>
         }} keyExtractor={(mealItem) => mealItem.id}/>
+      <StatusBar style="dark" backgroundColor="white" />
     </View>
   );
 };

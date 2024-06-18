@@ -1,18 +1,21 @@
-import { useContext, useRef, useState, useEffect, useLayoutEffect } from "react";
+import { useRef, useLayoutEffect } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { FavoritesContext } from "../store/context/favorites-context";
+// import { FavoritesContext } from "../store/context/favorites-context";
 import { MEALS } from "../data/dummy_data";
 import { MealItem } from "../components/MealItem";
 import { AppScreens } from "../utils/AppScreens";
 import LottieView from "lottie-react-native";
 import { AppFonts } from "../utils/AppFonts";
 import { AppColors } from "../utils/AppColors";
+import { useSelector } from "react-redux";
+import { StatusBar } from "expo-status-bar";
 
 export const FavoritesScreen = ({ navigation }) => {
-  const favoriteMealsCntx = useContext(FavoritesContext);
+    const favoriteMealItems = useSelector((state) => state.favoriteMealItemDetails.ids);
+//   const favoriteMealsCntx = useContext(FavoritesContext);
 
   const favoriteMeals = MEALS.filter((eachMeal) =>
-    favoriteMealsCntx.ids.includes(eachMeal.id)
+    favoriteMealItems.includes(eachMeal.id)
   );
 
   useLayoutEffect(()=>{
@@ -62,6 +65,7 @@ export const FavoritesScreen = ({ navigation }) => {
           );
         }}
       />
+      <StatusBar style="dark" backgroundColor="white" />
     </View>
   );
 };

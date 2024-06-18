@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { BackHandler, Platform, StyleSheet, Alert } from "react-native";
 import { CategoriesScreen } from "./screens/CategoriesScreen";
 import { AppColors } from "./utils/AppColors";
 import * as React from "react";
@@ -11,7 +11,11 @@ import { MealDetailsScreen } from "./screens/MealDetailsScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FavoritesScreen } from "./screens/FavoritesScreen";
 import { MaterialIcons } from "@expo/vector-icons";
-import { FavoritesContextProvider } from "./store/context/favorites-context";
+// import { FavoritesContextProvider } from "./store/context/favorites-context";
+import { Provider } from "react-redux";
+import redux_store from "./store/redux/redux_store";
+import { useNavigationState } from "@react-navigation/native";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -60,8 +64,12 @@ const BottomNavigation = () => {
 };
 
 export default function App() {
+  
   return (
-    <FavoritesContextProvider>
+    // <FavoritesContextProvider>
+    // </FavoritesContextProvider>
+
+    <Provider store={redux_store}>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -100,7 +108,7 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </FavoritesContextProvider>
+    </Provider>
   );
 }
 

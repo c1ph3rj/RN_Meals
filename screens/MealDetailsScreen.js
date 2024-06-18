@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { StyleSheet, View, Text, ScrollView, StatusBar } from "react-native";
 import { MEALS } from "../data/dummy_data";
 import { AppColors } from "../utils/AppColors";
 import { AppFonts } from "../utils/AppFonts";
@@ -6,26 +6,30 @@ import { Image } from "expo-image";
 import { ListItem } from "../components/ListItem";
 import { MealInfoTile } from "../components/MealInfoTile";
 import { IconBtn } from "../components/IconBtn";
-import { useContext, useLayoutEffect } from "react";
-import { FavoritesContext } from "../store/context/favorites-context";
+import { useLayoutEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite, removeFavorite } from "../store/redux/favorites-reducers";
+// import { FavoritesContext } from "../store/context/favorites-context";
 
 export const MealDetailsScreen = ({ navigation, route }) => {
-  const favoriteMealsCntx = useContext(FavoritesContext);
+  // const favoriteMealsCntx = useContext(FavoritesContext);
+  const favoriteMealItems = useSelector((state) => state.favoriteMealItemDetails.ids);
+  const dispatcher = useDispatch();
   const mealId = route.params.mealId;
   const mealItem = MEALS.find((mealItem) => mealItem.id === mealId);
 
   const onPressFavoriteHandler = () => {
-    if(favoriteMealsCntx.ids.includes(mealId)) {
-      favoriteMealsCntx.removeFavorites(mealId);
+    if(favoriteMealItems.includes(mealId)) {
+      dispatcher(removeFavorite({id: mealId}));
     } else {
-      favoriteMealsCntx.addFavorites(mealId);
+      dispatcher(addFavorite({id: mealId}));
     }
   }
 
   useLayoutEffect(()=>{
     navigation.setOptions({
       title: "Meal Details",
-      headerRight: () => <IconBtn onPressFavorite={onPressFavoriteHandler} name={favoriteMealsCntx.ids.includes(mealId) ? 'star' : 'staro'} color={AppColors.color1} />
+      headerRight: () => <IconBtn onPressFavorite={onPressFavoriteHandler} name={favoriteMealItems.includes(mealId) ? 'star' : 'staro'} color={AppColors.color1} />
     });
   }, [navigation, onPressFavoriteHandler])
 
@@ -57,6 +61,7 @@ export const MealDetailsScreen = ({ navigation, route }) => {
           );
         })}
       </View>
+      <StatusBar style="dark" backgroundColor="white" />
     </ScrollView>
   );
 };
